@@ -1,11 +1,11 @@
 # netlify.toml (put this at the repo root)
 [build]
-  command = "pnpm build"        # or "npm run build" if you use npm
+  command = "npm run build"        
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
-  PNPM_VERSION = "9.12.0"        # remove if you're using npm
+ 
 
 # SPA fallback so /authors, /add-book, etc. work on refresh
 [[redirects]]
