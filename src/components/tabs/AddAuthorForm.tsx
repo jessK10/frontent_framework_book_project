@@ -1,215 +1,149 @@
-import { useState, type FormEvent } from "react"
-import { countries } from "../../mockData/countries"
-import type { Author } from "../../types/Authors"
+// src/components/tabs/AddAuthorForm.tsx
+import { useState, type FormEvent } from "react";
+import { countries } from "@/mockData/countries";
+import type { AuthorInput } from "@/types/Authors";
 
 interface AddAuthorFormProps {
-	onSubmit: (author: Author) => void
-	onCancel?: () => void
+  onSubmit: (author: AuthorInput) => void;
+  onCancel?: () => void;
 }
 
 const AddAuthorForm = ({ onSubmit, onCancel }: AddAuthorFormProps) => {
-	const [formData, setFormData] = useState<Author>({
-		name: "",
-		bio: "",
-		birthYear: new Date().getFullYear(),
-		country: "",
-	})
+  const [formData, setFormData] = useState<AuthorInput>({
+    name: "",
+    bio: "",
+    birthYear: new Date().getFullYear(),
+    country: "",
+  });
+  const [errors, setErrors] = useState<Partial<Record<keyof AuthorInput, string>>>({});
 
-	const [errors, setErrors] = useState<Partial<Record<keyof Author, string>>>(
-		{}
-	)
+  const handleChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  > = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "birthYear" ? parseInt(value) || 0 : value,
+    }));
+    if (errors[name as keyof AuthorInput]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
 
-	const handleChange = (
-		e: React.ChangeEvent<
-			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-		>
-	) => {
-		const { name, value } = e.target
-		setFormData((prev) => ({
-			...prev,
-			[name]: name === "birthYear" ? parseInt(value) || 0 : value,
-		}))
-		// Clear error when user starts typing
-		if (errors[name as keyof Author]) {
-			setErrors((prev) => ({ ...prev, [name]: "" }))
-		}
-	}
+  const validate = (): boolean => {
+    const next: Partial<Record<keyof AuthorInput, string>> = {};
+    if (!formData.name.trim()) next.name = "Name is required";
+    if (!formData.bio.trim()) next.bio = "Bio is required";
+    if (!formData.country.trim()) next.country = "Country is required";
+    if (
+      !formData.birthYear ||
+      formData.birthYear < 1000 ||
+      formData.birthYear > new Date().getFullYear()
+    ) next.birthYear = "Please enter a valid birth year";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
-	const validate = (): boolean => {
-		const newErrors: Partial<Record<keyof Author, string>> = {}
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!validate()) return;
+    onSubmit(formData);
+    setFormData({ name: "", bio: "", birthYear: new Date().getFullYear(), country: "" });
+    setErrors({});
+  };
 
-		if (!formData.name.trim()) {
-			newErrors.name = "Name is required"
-		}
+  const inputClasses = (err?: string) =>
+    ["glass-input", err ? "ring-2 ring-red-400/60 focus:ring-red-400/70" : "focus:ring-cyan-400/40"].join(" ");
 
-		if (!formData.bio.trim()) {
-			newErrors.bio = "Bio is required"
-		}
+  return (
+    <div className="form-card max-w-3xl">
+      <h2 className="text-xl font-semibold text-sky-100">Add New Author</h2>
+      <p className="mt-1 mb-6 text-sm text-sky-200/70">
+        Provide a short bio and basic details for the author.
+      </p>
 
-		if (!formData.country.trim()) {
-			newErrors.country = "Country is required"
-		}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label htmlFor="name" className="mb-1 block text-sm font-medium text-sky-200/80">
+            Name <span className="text-red-400">*</span>
+          </label>
+          <input
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className={inputClasses(errors.name)}
+            placeholder="Enter author's full name"
+          />
+          {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
+        </div>
 
-		if (
-			!formData.birthYear ||
-			formData.birthYear < 1000 ||
-			formData.birthYear > new Date().getFullYear()
-		) {
-			newErrors.birthYear = "Please enter a valid birth year"
-		}
+        <div>
+          <label htmlFor="bio" className="mb-1 block text-sm font-medium text-sky-200/80">
+            Biography <span className="text-red-400">*</span>
+          </label>
+          <textarea
+            id="bio"
+            name="bio"
+            value={formData.bio}
+            onChange={handleChange}
+            rows={4}
+            className={inputClasses(errors.bio)}
+            placeholder="Enter a brief biography"
+          />
+          {errors.bio && <p className="mt-1 text-xs text-red-400">{errors.bio}</p>}
+        </div>
 
-		setErrors(newErrors)
-		return Object.keys(newErrors).length === 0
-	}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor="birthYear" className="mb-1 block text-sm font-medium text-sky-200/80">
+              Birth Year <span className="text-red-400">*</span>
+            </label>
+            <input
+              id="birthYear"
+              name="birthYear"
+              type="number"
+              value={formData.birthYear}
+              onChange={handleChange}
+              min={1000}
+              max={new Date().getFullYear()}
+              className={inputClasses(errors.birthYear)}
+              placeholder="e.g., 1950"
+            />
+            {errors.birthYear && <p className="mt-1 text-xs text-red-400">{errors.birthYear}</p>}
+          </div>
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
+          <div>
+            <label htmlFor="country" className="mb-1 block text-sm font-medium text-sky-200/80">
+              Country <span className="text-red-400">*</span>
+            </label>
+            <select
+              id="country"
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              className={inputClasses(errors.country)}
+            >
+              <option value="">Select a country</option>
+              {countries.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            {errors.country && <p className="mt-1 text-xs text-red-400">{errors.country}</p>}
+          </div>
+        </div>
 
-		if (validate()) {
-			onSubmit(formData)
-			// Reset form after successful submission
-			setFormData({
-				name: "",
-				bio: "",
-				birthYear: new Date().getFullYear(),
-				country: "",
-			})
-			setErrors({})
-		}
-	}
+        <div className="flex flex-wrap gap-3 pt-2">
+          <button type="submit" className="btn-primary flex-1">Add Author</button>
+          {onCancel && (
+            <button type="button" onClick={onCancel} className="btn-ghost flex-1">
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+};
 
-	return (
-		<div className="bg-white rounded-lg shadow-md p-6 max-w-2xl mx-auto">
-			<h2 className="text-2xl font-bold text-gray-800 mb-6">Add New Author</h2>
-
-			<form onSubmit={handleSubmit} className="space-y-4">
-				{/* Name Input */}
-				<div>
-					<label
-						htmlFor="name"
-						className="block text-sm font-medium text-gray-700 mb-1"
-					>
-						Name *
-					</label>
-					<input
-						type="text"
-						id="name"
-						name="name"
-						value={formData.name}
-						onChange={handleChange}
-						className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-							errors.name ? "border-red-500" : "border-gray-300"
-						}`}
-						placeholder="Enter author's full name"
-					/>
-					{errors.name && (
-						<p className="mt-1 text-sm text-red-600">{errors.name}</p>
-					)}
-				</div>
-
-				{/* Bio Input */}
-				<div>
-					<label
-						htmlFor="bio"
-						className="block text-sm font-medium text-gray-700 mb-1"
-					>
-						Biography *
-					</label>
-					<textarea
-						id="bio"
-						name="bio"
-						value={formData.bio}
-						onChange={handleChange}
-						rows={4}
-						className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none ${
-							errors.bio ? "border-red-500" : "border-gray-300"
-						}`}
-						placeholder="Enter a brief biography"
-					/>
-					{errors.bio && (
-						<p className="mt-1 text-sm text-red-600">{errors.bio}</p>
-					)}
-				</div>
-
-				{/* Birth Year and Country in a grid */}
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{/* Birth Year Input */}
-					<div>
-						<label
-							htmlFor="birthYear"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Birth Year *
-						</label>
-						<input
-							type="number"
-							id="birthYear"
-							name="birthYear"
-							value={formData.birthYear}
-							onChange={handleChange}
-							min="1000"
-							max={new Date().getFullYear()}
-							className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-								errors.birthYear ? "border-red-500" : "border-gray-300"
-							}`}
-							placeholder="e.g., 1950"
-						/>
-						{errors.birthYear && (
-							<p className="mt-1 text-sm text-red-600">{errors.birthYear}</p>
-						)}
-					</div>
-
-					{/* Country Input */}
-					<div>
-						<label
-							htmlFor="country"
-							className="block text-sm font-medium text-gray-700 mb-1"
-						>
-							Country *
-						</label>
-						<select
-							id="country"
-							name="country"
-							value={formData.country}
-							onChange={handleChange}
-							className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-								errors.country ? "border-red-500" : "border-gray-300"
-							}`}
-						>
-							<option value="">Select a country</option>
-							{countries.map((country) => (
-								<option key={country} value={country}>
-									{country}
-								</option>
-							))}
-						</select>
-						{errors.country && (
-							<p className="mt-1 text-sm text-red-600">{errors.country}</p>
-						)}
-					</div>
-				</div>
-
-				{/* Form Actions */}
-				<div className="flex gap-3 pt-4">
-					<button
-						type="submit"
-						className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-					>
-						Add Author
-					</button>
-					{onCancel && (
-						<button
-							type="button"
-							onClick={onCancel}
-							className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-						>
-							Cancel
-						</button>
-					)}
-				</div>
-			</form>
-		</div>
-	)
-}
-
-export default AddAuthorForm
+export default AddAuthorForm;

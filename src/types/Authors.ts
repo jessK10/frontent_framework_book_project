@@ -1,17 +1,10 @@
 export type Author = {
-	id?: number
-	name: string
-	bio: string
-	birthYear: number
-	country: string
-}
+  id: number;
+  name: string;
+  bio: string;
+  birthYear: number;
+  country: string;
+};
 
-/*
-{
-		id: 4,
-		name: "F. Scott Fitzgerald",
-		bio: "Francis Scott Key Fitzgerald was an American novelist and short story writer of the Jazz Age.",
-		birthYear: 1896,
-		country: "United States",
-	},
-*/
+// Use this for create/update payloads where `id` is not provided by the form
+export type AuthorInput = Omit<Author, "id">;

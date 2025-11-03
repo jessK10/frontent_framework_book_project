@@ -1,204 +1,235 @@
-# Books & Authors Library - React + TypeScript Project
+ChatGPT a dit :
+BOOKSHOW · Interactive Library (React + TypeScript + Tailwind)
 
-## Project Overview
+A modern, glass-morphism library app for exploring books and authors. Includes fast, scoped search; keyboard-navigable tabs; Google Books quick-fill; and a refined neon-night theme
 
-This is a full-stack student project that demonstrates the integration of a React TypeScript frontend with a C# backend API. The application allows users to browse books and authors, with additional data enrichment from the Google Books API.
+Table of Contents
 
-## Learning Objectives
+Overview
 
-Students will learn:
+Key Features
 
-- Building a React application with TypeScript
-- Component-based architecture and prop management
-- State management with React hooks
-- API integration patterns
-- Styling with Tailwind CSS
-- Full-stack development workflow
+Screenshots
 
-## Project Structure
+Architecture
 
-```
-books-lists/
-├── src/
-│   ├── components/           # Reusable UI components
-│   │   ├── AuthorCard.tsx    # Displays author information
-│   │   ├── BookCard.tsx      # Displays book information
-│   │   └── SearchBar.tsx     # Search input component
-│   ├── mockData/             # Static data for development
-│   │   └── staticData.ts     # Books and authors mock data
-│   ├── services/             # API service layers (to be implemented)
-│   ├── types/                # TypeScript type definitions (to be implemented)
-│   ├── App.tsx               # Main application component
-│   ├── main.tsx              # Application entry point
-│   └── index.css             # Global styles with Tailwind
-├── public/                   # Static assets
-├── package.json              # Dependencies and scripts
-├── tsconfig.json             # TypeScript configuration
-├── vite.config.js            # Vite build configuration
-└── README.md                 # This file
-```
+Tech Stack
 
-## Current Features
+Getting Started
 
-### Phase 1: Static UI (Current)
+Configuration
 
-- ✅ Component-based architecture
-- ✅ Tab navigation between Books and Authors views
-- ✅ Search functionality across books and authors
-- ✅ Responsive design with Tailwind CSS
-- ✅ Static mock data for development
+Available Scripts
 
-### Phase 2: API Integration (Next Steps)
+Project Structure
 
-- Create API service layer for C# backend
-- Integrate Google Books API for cover images and metadata
-- Implement React Context for state management
-- Add loading states and error handling
-- Connect frontend to student-built C# backend
+Services & Data Flow
 
-### Phase 3: Advanced Features (Future)
+Accessibility
 
-- Add book details page
-- Implement filtering and sorting
-- Add favorites/bookmarks functionality
-- User authentication (if required)
+Troubleshooting
 
-## Technology Stack
+Roadmap
 
-### Frontend
+License
 
-- React 18 - UI library
-- TypeScript - Type safety and better developer experience
-- Vite - Fast build tool and dev server
-- Tailwind CSS - Utility-first CSS framework
-- Lucide React - Icon library
+Overview
 
-### Backend (Student Project)
+BOOKSHOW is a lightweight library dashboard that demonstrates clean component design, a thoughtful UI system (glass panels, gradient glows, OKLCH tokens), and pragmatic client-side data handling (optimistic updates with rollback). It is production-ready for small collections or can be used as a reference UI for larger projects.
 
-- C# / ASP.NET Core - RESTful API
-- Entity Framework - Database ORM
-- SQL Server / PostgreSQL - Database
+Key Features
 
-### External APIs
+Polished UI System
 
-**Google Books API** - Book covers, reviews, and metadata
+Neon glass aesthetic with OKLCH color tokens and reusable utilities.
 
-## Getting Started
+Responsive layout with a hero, divider band, and raised content surface.
 
-### Prerequisites
+Smart Navigation
 
-- Node.js 16+ and npm
-- Code editor (VS Code recommended)
+Tablist with keyboard controls (Left/Right, Home/End).
 
-### Installation
+Navbar search that filters both books and authors.
 
-1. Fork the repository and clone it to your local machine.
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run dev`
-4. Open the application in your browser at `http://localhost:5173`
+Book & Author Management
 
-## Backend Development (C# Team)
+Book grid with cover images, author labels, and delete (optimistic).
 
-## Frontend Development (React Team)
+Author cards with counts, hover states, and safe delete flow.
 
-### Component Structure
+Create Flows
 
-- Proper component separation and organization
-- TypeScript interfaces for all props
-- Reusable components with clear responsibilities
-- Responsive design with Tailwind CSS
+Add Book: Google Books quick-fill by typing title (prefills year, author, ISBN, cover).
 
-### State Management
+Add Author: Validated form with country selector.
 
-- Create React Context for global state
-- Implement custom hooks for data fetching
-- Proper state updates and side effects
+Type-Safe Services
 
-### API Integration
+DTOs for data contracts and a clean service layer (authorsService, booksService, googleBooksService).
 
-- Create service layer for C# backend API
-- Integrate Google Books API for enriched data
-- Error handling and loading states
-- Proper async/await patterns
+Screenshots
 
-### User Interface
+Replace with your own images or GIFs.
 
-- Clean, intuitive design
-- Responsive layout (mobile and desktop)
-- Smooth transitions and interactions
-- Accessibility considerations
+Home / Books
+[screenshot here]
 
-## API Endpoints Documentation
+Authors
+[screenshot here]
 
-```
-C# Backend (To Be Implemented by Students)
-```
+Add Book (Google quick-fill)
+[screenshot here]
 
-### Books Endpoints
+Architecture
 
-```
-GET    /books           - Get all books
-GET    /books/{id}      - Get book by ID
-POST   /books           - Create new book
-PUT    /books/{id}      - Update book
-DELETE /books/{id}      - Delete book
-```
+React + TS components with a small, clear state model.
 
-### Authors Endpoints
+Service layer abstracts REST calls.
 
-```
-GET    /authors         - Get all authors
-GET    /authors/{id}    - Get author by ID
-POST   /authors         - Create new author
-PUT    /authors/{id}    - Update author
-DELETE /authors/{id}    - Delete author
-```
+Optimistic UI: delete operations update the UI immediately and rollback on error.
 
-## Google Books API Integration
+Tailwind v4 with @theme inline and a custom design system:
 
-Base URL: `https://www.googleapis.com/books/v1`
+Utilities: glass-panel, bg-starfield, animate-float, twinkle.
 
-### Key Endpoint:
+Components: .tab, .tab-active, .glass-input, .btn-primary, .btn-ghost, .form-card, .section-divider.
 
-```bash
-GET /volumes?q=isbn:{ISBN}
-```
+Tech Stack
 
-#### Use this to fetch additional book data like:
+UI: React 18, Tailwind CSS v4, TypeScript
 
-- High-resolution cover images
-- Average ratings and review counts
-- Publisher information
-- Page counts
+Build: Vite
 
-## Common Issues & Solutions
+Data: REST services (authors/books), Google Books (public endpoint, optional key)
 
-### CORS Errors
+Styling: OKLCH color space, glass-morphism patterns
 
-- Ensure that your backend server is configured to allow cross-origin requests (CORS).
-- Check the CORS settings in your backend server's configuration.
-- If needed, add appropriate CORS headers to your API responses.
+Getting Started
+# 1) Install
+pnpm install      # or: yarn / npm install
 
-### TypeScript Errors
+# 2) Run development server
+pnpm dev          # or: yarn dev / npm run dev
 
-- Ensure that your TypeScript configuration is set up correctly.
-- Make sure to have TypeScript installed and configured in your development environment.
-- Check your TypeScript configuration file for any errors or warnings.
+# 3) Build & preview
+pnpm build
+pnpm preview
 
-### API Rate Limits
 
-- Google Books API has rate limits and quotas.
-- Ensure that your API requests are within the rate limits to avoid being blocked.
-- Check the rate limits and quotas documentation for the Google Books API.
+Path aliases: @ → src. Example: import Navbar from "@/components/Navbar";.
 
-## Support
+Configuration
+Optional: Google Books API Key
 
-### For questions or issues:
+Public search works without a key. If you have a key, create .env:
 
-- Check the documentation first
-- Review error messages carefully
-- Ask your instructor or teaching assistant
-- Collaborate with your team members
+VITE_GOOGLE_BOOKS_API_KEY=your_key_here
 
-Good luck with your project!
-**Remember:** learning to debug and problem-solve is just as important as writing code.
+
+The service reads the key if present and includes it in requests.
+
+Backend Endpoints
+
+Update base URLs in:
+
+src/services/authorsService.ts
+
+src/services/booksService.ts
+
+Available Scripts
+pnpm dev         # Start Vite dev server
+pnpm build       # Production build
+pnpm preview     # Preview built assets
+pnpm lint        # If ESLint is configured
+pnpm format      # If Prettier is configured
+
+Project Structure
+src/
+  components/
+    AuthorCard.tsx
+    BookCard.tsx
+    HeroSection.tsx
+    Navbar.tsx
+    SectionDivider.tsx
+    tabs/
+      AddAuthorForm.tsx
+      AddBookForm.tsx
+      NavogationTabs.tsx
+  services/
+    authorsService.ts
+    booksService.ts
+    googleBooksService.ts
+  types/
+    Authors.ts
+    dtos.ts
+  App.tsx
+  main.tsx
+index.css          # Tailwind theme, utilities, component classes
+
+Services & Data Flow
+
+Authors
+
+getAll(): Promise<AuthorDto[]>
+
+create({ name }): Promise<AuthorDto>
+
+remove(id): Promise<void>
+
+Books
+
+getAll(): Promise<BookDto[]>
+
+create({ title, year, authorId? }): Promise<BookDto>
+
+remove(id): Promise<void>
+
+Google Books
+
+searchBooksByTitle(q): Promise<GoogleBook[]>
+Returns { title, author, publishedDate, isbn, thumbnail } for quick-fill.
+
+Optimistic Updates
+
+Deletes remove items from state immediately.
+
+On failure, UI rolls back to the previous snapshot and shows an error.
+
+Accessibility
+
+Proper roles: role="tablist" and role="tab" with aria-selected and tabIndex.
+
+Keyboard navigation: ArrowLeft, ArrowRight, Home, End.
+
+Focus indicators: visible focus rings across interactive elements.
+
+Color contrast: tuned OKLCH tokens for dark theme readability.
+
+Troubleshooting
+
+Unknown at rule @custom-variant / @utility:
+This is an editor warning. Tailwind v4 processes these directives at build time. Ensure Tailwind v4 is installed and restart the dev server after CSS changes.
+
+“Cannot apply unknown utility class ‘glass-panel’”:
+Ensure glass-panel is defined under @layer utilities using @utility (already in index.css). Restart Vite.
+
+Type mismatches in forms:
+
+AddBookForm → onSubmit(book) includes UI-only fields (isbn, coverUrl, description).
+
+AddAuthorForm → onSubmit(author: AuthorInput).
+Verify prop signatures when customizing.
+
+Roadmap
+
+Edit flows (book/author)
+
+Pagination + lazy image loading
+
+Details modal with richer metadata
+
+Toast notifications
+
+Theming toggle (light/dark — tokens already prepared)
+
+Tests (Vitest + React Testing Library / Playwright)
